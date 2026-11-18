@@ -2,7 +2,7 @@
 # One-time setup for the Flutter app. Run from the project root:  ./setup.sh
 # Needs: Flutter 3.22 or newer on your PATH.
 set -euo pipefail
-cd "$(dirname "$0")/app"
+cd "$(dirname "$0")"
 
 command -v flutter >/dev/null || { echo "Flutter is not installed or not on PATH."; exit 1; }
 

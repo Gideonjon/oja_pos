@@ -1,0 +1,52 @@
+Running `(cd /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/; ANDROID_HOME=/Users/mac/Library/Android/sdk TMPDIR=/var/folders/g5/pq0lj3kx0dz_rlm6lb7tyzm40000gn/T/ PATH=/usr/local/opt/node@24/bin:/Users/mac/.vscode/extensions/vadimcn.vscode-lldb-1.12.1/bin:/Users/mac/Developer/flutter/bin/:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/Users/mac/Developer/flutter/bin/:/Users/mac/.vscode/extensions/vadimcn.vscode-lldb-1.12.1/bin:/usr/local/opt/node@24/bin:/usr/local/sbin:/Users/mac/Documents/development/flutter/bin:/Users/mac/Library/Android/sdk/platform-tools:/Users/mac/Library/Android/sdk/cmdline-tools/latest/bin:/Users/mac/.pub-cache/bin:/Users/mac/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Applications/Visual Studio Code.app/Contents/Resources/app/bin/copilot-shim:/Users/mac/Documents/development/flutter/bin:/Users/mac/Library/Android/sdk/platform-tools:/Users/mac/Library/Android/sdk/cmdline-tools/latest/bin:/Users/mac/.pub-cache/bin HOME=/Users/mac /Users/mac/Developer/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/mac/Developer/oja_pos/.dart_tool/package_config.json /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/objective_c/5f31b8d621/hook.dill --config=/Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/objective_c/5f31b8d621/input.json )`.
+INFO: 2026-11-18 18:31:10.581762: Using compiler /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang from BuildInput.cCompiler.cc.
+
+INFO: 2026-11-18 18:31:10.621451: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/include/dart_api_dl.c -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-11-18 18:31:10.627917: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/objective_c.c -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.c.o
+
+INFO: 2026-11-18 18:31:10.634752: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/input_stream_adapter.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-11-18 18:31:10.635726: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/objective_c.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.m.o
+
+INFO: 2026-11-18 18:31:10.637150: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/observer.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/observer.m.o
+
+INFO: 2026-11-18 18:31:10.637800: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/ns_number.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/ns_number.m.o
+
+INFO: 2026-11-18 18:31:10.638368: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/protocol.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/protocol.m.o
+
+INFO: 2026-11-18 18:31:10.657674: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/mac/.pub-cache/hosted/pub.dev/objective_c-9.5.0/src/objective_c_bindings_generated.m -fpic -gline-tables-only -I src -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-11-18 18:31:12.825695: 
+INFO: 2026-11-18 18:31:12.826117: 
+INFO: 2026-11-18 18:31:12.826323: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.c.o
+
+INFO: 2026-11-18 18:31:12.874588: 
+INFO: 2026-11-18 18:31:12.874842: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-11-18 18:31:13.313029: 
+INFO: 2026-11-18 18:31:13.313140: 
+INFO: 2026-11-18 18:31:13.313224: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/observer.m.o
+
+INFO: 2026-11-18 18:31:13.746241: 
+INFO: 2026-11-18 18:31:13.746373: 
+INFO: 2026-11-18 18:31:13.746426: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/protocol.m.o
+
+INFO: 2026-11-18 18:31:18.155220: 
+INFO: 2026-11-18 18:31:18.155310: 
+INFO: 2026-11-18 18:31:18.155364: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/ns_number.m.o
+
+INFO: 2026-11-18 18:31:18.416664: 
+INFO: 2026-11-18 18:31:18.416794: 
+INFO: 2026-11-18 18:31:18.416860: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.m.o
+
+INFO: 2026-11-18 18:31:18.438266: 
+INFO: 2026-11-18 18:31:18.438418: 
+INFO: 2026-11-18 18:31:18.438470: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-11-18 18:31:19.319132: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target x86_64-apple-darwin -mmacos-version-min=13 /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/include/dart_api_dl.c.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.c.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/input_stream_adapter.m.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c.m.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/observer.m.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/ns_number.m.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/protocol.m.o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/obj/src/objective_c_bindings_generated.m.o -o /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/objective_c.dylib
+
+INFO: 2026-11-18 18:31:21.253199: 
+INFO: 2026-11-18 18:31:21.253496: 
+INFO: 2026-11-18 18:31:21.253559: Generated /Users/mac/Developer/oja_pos/.dart_tool/hooks_runner/shared/objective_c/build/5f31b8d621/objective_c.dylib
+
