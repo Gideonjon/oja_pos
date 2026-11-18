@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oja POS</title>
+<meta name="description" content="Oja POS turns your phone into a till. Take Lightning, card, transfer and cash, and sell airtime, data and bills from one app.">
+<meta property="og:title" content="Oja POS">
+<meta property="og:description" content="Every payment. One till.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22%3E%3Crect width=%22512%22 height=%22512%22 rx=%22116%22 fill=%22%230B6E4F%22/%3E%3Cg transform=%22translate%2857.0 76.5%29 scale%280.5%29%22%3E%3Cg fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2288%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%22174%22 cy=%22350%22 r=%22106.0%22/%3E%3Cpath d=%22M398.0 244.0 V556 Q398.0 650 308.0 650%22/%3E%3Ccircle cx=%22622.0%22 cy=%22350%22 r=%22106.0%22/%3E%3Cpath d=%22M728.0 244.0 V456.0%22/%3E%3C/g%3E%3Cpath d=%22M428.0 22 L344.0 116 H392.0 L368.0 178 L454.0 80 H406.0 Z%22 fill=%22%23F7931A%22 stroke=%22%23F7931A%22 stroke-width=%2214%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: white space first. One brand green, one orange spark, soft
+   tinted panels that hold the product and the illustrations. Short headlines. */
+:root {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --ink: #0E1726;
+  --green: #0B6E4F;       /* brand */
+  --green-deep: #08382B;
+  --mint: #E9F6EF;        /* soft panel */
+  --bolt: #F7931A;        /* spark: used sparingly */
+  --peach: #FEF3E2;
+  --sky: #EAF1FE;
+  --lilac: #F1ECFC;
+  --muted: #5F6878;
+  --line: #E7E9EE;
+  --display: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --body: "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --wrap: 1120px;
+  --r: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; margin: 0; text-wrap: balance; letter-spacing: -0.035em; line-height: 1.06; }
+p { margin: 0; }
+.wrap { width: min(var(--wrap), 100% - 40px); margin-inline: auto; }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 10px; }
+
+/* ---------- nav ---------- */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.86); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid transparent; transition: border-color .3s; }
+.top.stuck { border-bottom-color: var(--line); }
+.nav { display: flex; align-items: center; gap: 30px; height: 72px; }
+.brand { display: flex; align-items: center; margin-right: auto; text-decoration: none; }
+.brand svg { height: 52px; width: auto; }
+.nav a.link { text-decoration: none; font-weight: 500; font-size: 15.5px; color: var(--muted); transition: color .2s; }
+.nav a.link:hover { color: var(--ink); }
+.btn { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 999px; background: var(--green); color: #fff; transition: transform .2s, box-shadow .2s; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -10px rgba(11,110,79,.7); }
+.btn.big { font-size: 17px; padding: 17px 30px; }
+.btn.ghost { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+.btn.ghost:hover { border-color: var(--ink); box-shadow: none; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+.nav a.login { color: var(--ink); font-weight: 600; }
+.fine a { color: var(--green); font-weight: 600; }
+
+/* ---------- hero ---------- */
+.hero { text-align: center; padding: 56px 0 0; }
+.tag { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--green); background: var(--mint); padding: 7px 14px 7px 10px; border-radius: 999px; }
+.tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--bolt); animation: ping 2.4s infinite; }
+h1 { font-size: clamp(42px, 8vw, 88px); letter-spacing: -0.05em; margin: 22px auto 20px; max-width: 12em; }
+h1 span { color: var(--green); }
+.lede { font-size: clamp(17px, 1.7vw, 20px); color: var(--muted); max-width: 33em; margin-inline: auto; }
+.stores { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero .stores { justify-content: center; }
+.store { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; text-align: left; padding: 11px 22px 11px 16px; border-radius: 16px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); min-width: 176px; transition: transform .2s, border-color .2s, box-shadow .2s; }
+.store svg { width: 26px; height: 26px; flex: none; }
+.store small { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.2; }
+.store strong { display: block; font-family: var(--display); font-size: 17.5px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+.store:hover { transform: translateY(-3px); border-color: var(--ink); box-shadow: 0 14px 28px -18px rgba(14,23,38,.5); }
+.store.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+.store.primary small { color: rgba(255,255,255,.7); }
+.store.soon { opacity: .55; cursor: default; }
+.store.soon:hover { transform: none; border-color: var(--line); box-shadow: none; }
+.fine { margin-top: 16px; font-size: 14px; color: var(--muted); }
+.on-green .store { border-color: transparent; }
+.on-green .store.primary { background: var(--ink); }
+
+.seq > * { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+.seq > *:nth-child(2) { animation-delay: .07s; } .seq > *:nth-child(3) { animation-delay: .14s; }
+.seq > *:nth-child(4) { animation-delay: .21s; } .seq > *:nth-child(5) { animation-delay: .28s; }
+
+/* ---------- product stage ---------- */
+.stage { position: relative; margin-top: 56px; background: var(--mint); border-radius: 44px 44px 0 0; height: 470px; display: flex; justify-content: center; overflow: hidden; animation: rise .9s .25s cubic-bezier(.2,.7,.2,1) both; }
+.stage::before, .stage::after { content: ""; position: absolute; left: 50%; top: 58%; border: 1.5px solid rgba(11,110,79,.13); border-radius: 50%; translate: -50% -50%; }
+.stage::before { width: 620px; height: 620px; } .stage::after { width: 940px; height: 940px; }
+.phone { position: relative; z-index: 1; margin-top: 44px; width: 286px; height: 576px; border-radius: 46px; background: #0A0F18; padding: 10px; box-shadow: 0 40px 70px -30px rgba(8,56,43,.55); flex: none; }
+.phone::before { content: ""; position: absolute; top: 20px; left: 50%; width: 76px; height: 21px; margin-left: -38px; border-radius: 12px; background: #0A0F18; z-index: 3; }
+.screen { position: relative; height: 100%; border-radius: 37px; background: #F5F6F8; overflow: hidden; text-align: left; }
+.view { position: absolute; inset: 0; padding: 52px 17px 16px; display: flex; flex-direction: column; opacity: 0; transform: translateX(26px); transition: opacity .35s, transform .45s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
+.phone[data-step="charge"] .v-charge, .phone[data-step="qr"] .v-qr, .phone[data-step="done"] .v-done { opacity: 1; transform: none; }
+.v-title { font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.amount { display: grid; place-content: center; text-align: center; padding: 22px 0 16px; }
+.amount small { color: var(--muted); font-size: 12px; }
+.amount b { font-family: var(--display); font-size: 44px; font-weight: 800; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.keys span { text-align: center; padding: 8px 0; font-size: 20px; font-weight: 600; border-radius: 12px; transition: background .15s, transform .15s; }
+.keys span.hit { background: #E3E7EC; transform: scale(.94); }
+.methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 10px; }
+.methods span { display: grid; justify-items: center; gap: 4px; padding: 10px 2px; border-radius: 14px; color: #fff; font-size: 10.5px; font-weight: 700; transition: transform .2s, box-shadow .2s; }
+.methods svg { width: 18px; height: 18px; }
+.m-ln { background: var(--bolt); } .m-card { background: var(--green); } .m-cash { background: var(--ink); }
+.methods span.hit { transform: scale(.93); box-shadow: 0 0 0 5px rgba(247,147,26,.3); }
+.v-qr, .v-done { background: #fff; align-items: center; text-align: center; }
+.v-qr b.amt { font-family: var(--display); font-size: 32px; font-weight: 800; letter-spacing: -0.03em; margin-top: 10px; }
+.qr { width: 176px; height: 176px; margin: 12px 0; padding: 12px; border-radius: 22px; border: 1.5px solid var(--line); }
+.qr svg { width: 100%; height: 100%; }
+.wait { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13.5px; }
+.wait i { width: 14px; height: 14px; border-radius: 50%; border: 2.4px solid var(--bolt); border-right-color: transparent; animation: spin .8s linear infinite; }
+.v-qr p, .v-done p { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+.v-done { padding-top: 120px; }
+.tick { width: 92px; height: 92px; border-radius: 50%; background: var(--mint); display: grid; place-items: center; transform: scale(0); }
+.tick span { width: 62px; height: 62px; border-radius: 50%; background: var(--green); display: grid; place-items: center; }
+.tick svg { width: 34px; height: 34px; }
+.tick path { stroke: #fff; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; }
+.phone[data-step="done"] .tick { animation: pop .55s cubic-bezier(.3,1.6,.5,1) .1s forwards; }
+.phone[data-step="done"] .tick path { animation: draw .35s .45s ease-out forwards; }
+.v-done h3 { font-size: 22px; margin-top: 18px; }
+.v-done b.amt { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--green); margin-top: 6px; }
+.chip { position: absolute; z-index: 2; display: flex; align-items: center; gap: 10px; background: #fff; padding: 10px 16px 10px 10px; border-radius: 18px; font-size: 13.5px; line-height: 1.25; text-align: left; box-shadow: 0 20px 40px -22px rgba(8,56,43,.5); animation: bob 6s ease-in-out infinite; }
+.chip i { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+.chip i svg { width: 18px; height: 18px; }
+.chip b { display: block; font-weight: 700; }
+.chip span { color: var(--muted); font-size: 12.5px; }
+.c1 { top: 120px; left: calc(50% - 370px); animation-delay: -2s; }
+.c2 { top: 250px; left: calc(50% + 170px); animation-delay: -4s; }
+.c3 { top: 330px; left: calc(50% - 400px); animation-delay: -1s; }
+
+/* ---------- sections ---------- */
+section { padding: 104px 0; }
+.kicker { font-size: 14px; font-weight: 700; color: var(--green); letter-spacing: .01em; }
+h2 { font-size: clamp(32px, 4.6vw, 54px); letter-spacing: -0.045em; margin: 10px 0 16px; }
+.sub { color: var(--muted); max-width: 34em; font-size: 18px; }
+.head { text-align: center; margin-bottom: 44px; }
+.head .sub { margin-inline: auto; }
+
+.ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.way { border-radius: var(--r); padding: 30px 28px 32px; display: flex; flex-direction: column; gap: 10px; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.way:hover { transform: translateY(-6px); }
+.way .ico { width: 60px; height: 60px; border-radius: 20px; background: #fff; display: grid; place-items: center; margin-bottom: 44px; transition: transform .35s cubic-bezier(.3,1.5,.5,1); }
+.way:hover .ico { transform: rotate(-8deg) scale(1.08); }
+.way .ico svg { width: 30px; height: 30px; }
+.way h3 { font-size: 25px; letter-spacing: -0.035em; }
+.way p { font-size: 16px; color: #3F4857; }
+.w-ln { background: var(--peach); } .w-card { background: var(--sky); } .w-cash { background: var(--mint); }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.split + .split { margin-top: 96px; }
+.split.flip .art { order: 2; }
+.art { border-radius: 40px; padding: 28px; }
+.art svg { width: 100%; height: auto; }
+.art.a-peach { background: var(--peach); } .art.a-lilac { background: var(--lilac); } .art.a-mint { background: var(--mint); }
+.art svg > ellipse:first-child { display: none; } /* the panel replaces the illustration's own backdrop */
+.points { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
+.points li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; }
+.points li::before { content: ""; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; background: var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M7.5 13.500l3.700 3.700 7.300-8.400' fill='none' stroke='%230B6E4F' stroke-width='2.400' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/cover; }
+.points b { font-weight: 700; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 26px; }
+.tiles div { border: 1.5px solid var(--line); border-radius: 18px; padding: 14px 16px; font-weight: 700; font-size: 16px; transition: transform .25s, border-color .25s; }
+.tiles div:hover { transform: translateY(-3px); border-color: var(--green); }
+.tiles small { display: block; font-weight: 400; color: var(--muted); font-size: 13.5px; line-height: 1.35; margin-top: 1px; }
+
+/* ---------- steps ---------- */
+.how { background: #F7F8FA; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: step; list-style: none; padding: 0; margin: 0; }
+.steps li { counter-increment: step; background: #fff; border-radius: 26px; padding: 26px 24px 28px; position: relative; transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+.steps li:hover { transform: translateY(-5px); box-shadow: 0 24px 40px -28px rgba(14,23,38,.35); }
+.steps li::before { content: counter(step); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--mint); color: var(--green); font-family: var(--display); font-weight: 800; font-size: 17px; margin-bottom: 36px; }
+.steps li:last-child::before { background: var(--green); color: #fff; }
+.steps h3 { font-size: 19px; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 6px; }
+.steps p { font-size: 15px; color: var(--muted); line-height: 1.5; }
+
+/* ---------- security ---------- */
+.safe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.safe-grid div { border: 1.5px solid var(--line); border-radius: 26px; padding: 28px; display: grid; grid-template-columns: 48px 1fr; gap: 6px 18px; transition: border-color .3s, transform .3s; }
+.safe-grid div:hover { border-color: var(--green); transform: translateY(-3px); }
+.safe-grid i { grid-row: span 2; width: 48px; height: 48px; border-radius: 16px; background: var(--mint); display: grid; place-items: center; }
+.safe-grid i svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.safe-grid h3 { font-size: 20px; letter-spacing: -0.025em; line-height: 1.2; align-self: end; }
+.safe-grid p { color: var(--muted); font-size: 15.500px; }
+
+/* ---------- closing ---------- */
+.get { padding-top: 0; }
+.get-card { background: var(--green); color: #fff; border-radius: 44px; padding: clamp(36px, 6vw, 72px); text-align: center; position: relative; overflow: hidden; }
+.get-card::before, .get-card::after { content: ""; position: absolute; border: 1.500px solid rgba(255,255,255,.12); border-radius: 50%; left: 50%; top: 50%; translate: -50% -50%; pointer-events: none; }
+.get-card::before { width: 560px; height: 560px; } .get-card::after { width: 900px; height: 900px; }
+.get-card > * { position: relative; z-index: 1; }
+.get-card h2 { font-size: clamp(34px, 5.4vw, 64px); margin-top: 0; }
+.get-card .sub { color: rgba(255,255,255,.8); margin-inline: auto; }
+.get-card .stores { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); max-width: 620px; margin-inline: auto; }
+.get-card .store { min-width: 0; }
+
+footer.site { padding: 0 0 44px; color: var(--muted); font-size: 14.5px; }
+footer.site .wrap { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
+footer.site .brand svg { height: 38px; }
+footer.site a:not(.brand) { text-decoration: none; font-weight: 600; color: var(--ink); }
+
+/* scroll-in: movement only, content is always visible */
+.js .rise { transform: translateY(28px); transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.js .rise.in { transform: none; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pop { to { transform: scale(1); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(247,147,26,.55); } 70%, 100% { box-shadow: 0 0 0 9px rgba(247,147,26,0); } }
+
+@media (max-width: 1000px) {
+  .c1 { left: 3%; top: 70px; } .c2 { left: auto; right: 3%; top: 300px; } .c3 { display: none; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .steps li::before { margin-bottom: 22px; }
+}
+@media (max-width: 860px) {
+  .nav a.link:not(.login) { display: none; }
+  .phone { margin-top: 70px; }
+  .c1 { top: 14px; left: 16px; } .c2, .c3 { display: none; }
+  .nav { height: 64px; }
+  section { padding: 72px 0; }
+  .ways, .split, .safe-grid { grid-template-columns: 1fr; }
+  .way .ico { margin-bottom: 22px; }
+  .split { gap: 28px; } .split + .split { margin-top: 72px; }
+  .split.flip .art { order: 0; }
+  .art { padding: 16px; border-radius: 32px; }
+  .head { text-align: left; } .head .sub { margin-inline: 0; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .hero { padding-top: 36px; text-align: left; }
+  h1 { margin-inline: 0; } .lede { margin-inline: 0; }
+  .hero .stores, .cta { justify-content: flex-start; }
+  .cta .btn { flex: 1 1 100%; }
+  .store { flex: 1 1 100%; }
+  .stage { margin-top: 40px; border-radius: 32px 32px 0 0; height: 440px; margin-inline: -8px; }
+  .phone { width: 262px; height: 528px; margin-top: 64px; border-radius: 42px; }
+  .screen { border-radius: 33px; }
+  .amount { padding: 12px 0 8px; } .amount b { font-size: 40px; }
+  .chip { font-size: 12.5px; padding: 8px 12px 8px 8px; }
+  .c1 { top: 14px; left: 10px; } .c2 { display: none; }
+  .steps { grid-template-columns: 1fr; }
+  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: 2px 16px; padding: 20px; }
+  .steps li::before { grid-row: span 2; margin: 0; }
+  .safe-grid div { padding: 22px; grid-template-columns: 1fr; }
+  .safe-grid i { grid-row: auto; margin-bottom: 8px; }
+  .get-card { border-radius: 32px; text-align: left; }
+  .get-card .sub { margin-inline: 0; } .get-card .stores { justify-content: flex-start; }
+  footer.site .wrap { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 400px) {
+  .nav { gap: 14px; }
+  .nav a.login { display: none; }
+  .btn { padding: 11px 16px; font-size: 14px; }
+  .btn.big { padding: 16px 22px; font-size: 16px; }
+  .brand svg { height: 44px; }
+  .stage { height: 420px; }
+  .phone { transform: scale(.92); transform-origin: top center; }
+}
+@media (min-width: 1800px) {
+  :root { --wrap: 1280px; }
+  h1 { font-size: 104px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .tick path { stroke-dashoffset: 0; }
+  .tick { transform: scale(1); }
+  .js .rise { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top" id="nav">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Oja POS home"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 796 718"><g fill="none" stroke="#0B6E4F" stroke-width="88" stroke-linecap="round" stroke-linejoin="round"><circle cx="174" cy="350" r="106.0"/><path d="M398.0 244.0 V556 Q398.0 650 308.0 650"/><circle cx="622.0" cy="350" r="106.0"/><path d="M728.0 244.0 V456.0"/></g><path d="M428.0 22 L344.0 116 H392.0 L368.0 178 L454.0 80 H406.0 Z" fill="#F7931A" stroke="#F7931A" stroke-width="14" stroke-linejoin="round"/></svg></a>
+    <a class="link" href="#pay">Payments</a>
+    <a class="link" href="#bills">Bills</a>
+    <a class="link" href="#how">How it works</a>
+    <a class="link" href="#safe">Security</a>
+    <a class="link login" href="app/?mode=login" data-app="login">Log in</a>
+    <a class="btn" href="app/?mode=signup" data-app="signup">Create account</a>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <div class="seq">
+      <span class="tag"><i></i>For market traders and POS agents</span>
+      <h1>Every payment. <span>One till.</span></h1>
+      <p class="lede">Oja POS turns the phone you already own into a till. Take Lightning, card, transfer and cash, then sell airtime, data and electricity from the same screen.</p>
+      <div class="cta">
+        <a class="btn big" href="app/?mode=signup" data-app="signup">Create free account</a>
+        <a class="btn big ghost" href="app/?mode=login" data-app="login">Log in</a>
+      </div>
+      <p class="fine">Free and open source. Also on <a href="#get">Android and iPhone</a>.</p>
+    </div>
+
+    <div class="stage" aria-label="Demo of a ₦2,500 Lightning sale in the Oja POS app">
+      <div class="chip c1"><i style="background:#FEF3E2"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 13.500h5.500L9 22l9-12h-5.600z" fill="#F7931A"/></svg></i><div><b>Lightning sale</b><span>Straight to your wallet</span></div></div>
+      <div class="chip c2"><i style="background:#E9F6EF"><svg viewBox="0 0 24 24"><path d="M6 20V10m6 10V4m6 16v-7" stroke="#0B6E4F" stroke-width="3" stroke-linecap="round"/></svg></i><div><b>MTN airtime</b><span>Delivered from your float</span></div></div>
+      <div class="chip c3"><i style="background:#EAF1FE"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3" fill="#2E6BE6"/><rect x="3" y="9.5" width="18" height="3" fill="#fff"/></svg></i><div><b>Card payment</b><span>Added to your float</span></div></div>
+      <div class="phone" id="phone" data-step="charge">
+        <div class="screen">
+          <div class="view v-charge">
+            <div class="v-title">Charge</div>
+            <div class="amount"><small>Amount to collect</small><b id="amt">₦2,500</b></div>
+            <div class="keys" id="keys"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>00</span><span>0</span><span>⌫</span></div>
+            <div class="methods">
+              <span class="m-ln" id="mln"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 13.500h5.500L9 22l9-12h-5.600z" fill="#fff"/></svg>Lightning</span>
+              <span class="m-card"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3" fill="#fff"/><rect x="3" y="9.5" width="18" height="3" fill="#0B6E4F"/></svg>Card</span>
+              <span class="m-cash"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="11" rx="2.5" fill="#fff"/><circle cx="12" cy="12.5" r="3" fill="#0E1726"/></svg>Cash</span>
+            </div>
+          </div>
+          <div class="view v-qr">
+            <div class="v-title">Lightning payment</div>
+            <b class="amt">₦2,500</b>
+            <div class="qr" id="qr"></div>
+            <span class="wait"><i></i>Waiting for payment</span>
+            <p>Customer scans with any Lightning wallet</p>
+          </div>
+          <div class="view v-done">
+            <div class="tick"><span><svg viewBox="0 0 34 34"><path d="M8 18l6 6 12-14"/></svg></span></div>
+            <h3>Payment received</h3>
+            <b class="amt">+₦2,500</b>
+            <p>Paid by Lightning</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="pay">
+  <div class="wrap">
+    <div class="head rise">
+      <span class="kicker">Payments</span>
+      <h2>How would they like to pay?</h2>
+      <p class="sub">Type the amount and pick a method. You never turn a sale away because of how someone carries their money.</p>
+    </div>
+    <div class="ways">
+      <article class="way w-ln rise">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 13.500h5.500L9 22l9-12h-5.600z" fill="#F7931A"/></svg></div>
+        <h3>Lightning</h3>
+        <p>Show a QR code and receive bitcoin in seconds. The naira amount is converted at the live rate.</p>
+      </article>
+      <article class="way w-card rise">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3.5" fill="#2E6BE6"/><rect x="2.5" y="9" width="19" height="3" fill="#fff"/><rect x="5.5" y="14.5" width="6" height="2" rx="1" fill="#fff"/></svg></div>
+        <h3>Card, transfer, USSD</h3>
+        <p>The customer scans and pays through Paystack on their own phone. No card machine to rent.</p>
+      </article>
+      <article class="way w-cash rise">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="11" rx="2.5" fill="#0B6E4F"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg></div>
+        <h3>Cash</h3>
+        <p>Record it in one tap, so today's total is always the real total.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="bills" style="padding-top:0">
+  <div class="wrap">
+    <div class="split">
+      <div class="art a-peach rise"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" fill="none">
+
+<ellipse cx="400" cy="330" rx="330" ry="250" fill="#FEF1DD"/>
+<circle cx="130" cy="150" r="10" fill="#0B6E4F"/><circle cx="690" cy="170" r="14" fill="#F7931A"/><circle cx="660" cy="520" r="9" fill="#7A4BE0"/>
+<path d="M150 470 l8 -20 l8 20 l20 8 l-20 8 l-8 20 l-8 -20 l-20 -8 z" fill="#F7931A"/>
+<path d="M640 90 l6 -15 l6 15 l15 6 l-15 6 l-6 15 l-6 -15 l-15 -6 z" fill="#0B6E4F"/>
+<g transform="translate(110 200)"><rect x="6" y="10" width="170" height="320" rx="34" fill="#08382B" opacity=".18"/><rect width="170" height="320" rx="34" fill="#0E1726"/><rect x="9" y="9" width="152" height="302" rx="26" fill="#FFFFFF"/><rect x="59.0" y="18" width="52" height="10" rx="5" fill="#0E1726"/><rect x="30" y="50" width="110" height="10" rx="5" fill="#E3E7EC"/><rect x="24" y="80" width="122" height="122" rx="16" fill="#FFFFFF" stroke="#E3E7EC" stroke-width="3"/><rect x="34.7" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="34.7" y="137.2" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="44.0" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="44.0" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="53.3" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="53.3" y="137.2" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="53.3" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="62.6" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="62.6" y="137.2" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="62.6" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="71.9" y="90.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="71.9" y="109.3" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="71.9" y="118.6" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="71.9" y="155.8" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="71.9" y="174.4" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="90.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="100.0" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="109.3" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="118.6" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="137.2" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="165.1" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="81.2" y="183.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="90.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="100.0" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="118.6" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="155.8" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="90.5" y="183.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="99.8" y="165.1" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="99.8" y="183.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="109.1" y="127.9" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="109.1" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="109.1" y="155.8" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="109.1" y="165.1" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="118.4" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="118.4" y="183.7" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="127.7" y="146.5" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="127.7" y="165.1" width="7.8" height="7.8" rx="1.9" fill="#0E1726"/><rect x="34.0" y="90.0" width="27.900000000000002" height="27.900000000000002" rx="4.65" fill="#0E1726"/><rect x="40.975" y="96.975" width="13.950000000000001" height="13.950000000000001" rx="2.79" fill="#FFFFFF"/><rect x="44.230000000000004" y="100.23" width="7.440000000000001" height="7.440000000000001" rx="1.395" fill="#0E1726"/><rect x="108.4" y="90.0" width="27.900000000000002" height="27.900000000000002" rx="4.65" fill="#0E1726"/><rect x="115.375" y="96.975" width="13.950000000000001" height="13.950000000000001" rx="2.79" fill="#FFFFFF"/><rect x="118.63000000000001" y="100.23" width="7.440000000000001" height="7.440000000000001" rx="1.395" fill="#0E1726"/><rect x="34.0" y="164.4" width="27.900000000000002" height="27.900000000000002" rx="4.65" fill="#0E1726"/><rect x="40.975" y="171.375" width="13.950000000000001" height="13.950000000000001" rx="2.79" fill="#FFFFFF"/><rect x="44.230000000000004" y="174.63" width="7.440000000000001" height="7.440000000000001" rx="1.395" fill="#0E1726"/><circle cx="85" cy="252" r="24" fill="#DDF3E7"/><path d="M73 252 l9 9 l16 -18" stroke="#0B6E4F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+<circle cx="250" cy="300" r="5" fill="#F7931A" opacity="0.35"/><circle cx="282" cy="262" r="5" fill="#F7931A" opacity="0.44"/><circle cx="318" cy="230" r="5" fill="#F7931A" opacity="0.53"/><circle cx="358" cy="206" r="5" fill="#F7931A" opacity="0.62"/><circle cx="400" cy="192" r="5" fill="#F7931A" opacity="0.71"/><circle cx="442" cy="188" r="5" fill="#F7931A" opacity="0.80"/>
+<g transform="translate(520 180)"><circle cx="4" cy="8" r="62" fill="#08382B" opacity=".15"/><circle r="62" fill="#F7931A"/><circle r="48" fill="#FFB04A"/><path transform="translate(0 0) scale(0.2) translate(-256 -256)" d="M298 70 L178 290 H252 L214 442 L334 222 H260 Z" fill="#FFFFFF"/></g>
+<g transform="translate(360 300)">
+  <rect x="8" y="14" width="340" height="230" rx="34" fill="#08382B" opacity=".18"/>
+  <path d="M30 40 L250 0 a26 26 0 0 1 30 22 l4 30 H30 z" fill="#08382B"/>
+  <rect width="340" height="230" y="20" rx="34" fill="#0B6E4F"/>
+  <rect y="20" width="340" height="230" rx="34" fill="url(#w)" opacity=".0"/>
+  <path d="M24 70 H316" stroke="#FFFFFF" stroke-opacity=".28" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+  <rect x="228" y="104" width="130" height="70" rx="22" fill="#08382B"/><circle cx="264" cy="139" r="13" fill="#F7931A"/>
+  <rect x="36" y="106" width="120" height="14" rx="7" fill="#FFFFFF" fill-opacity=".9"/><rect x="36" y="134" width="76" height="12" rx="6" fill="#FFFFFF" fill-opacity=".45"/>
+  <rect x="36" y="188" width="150" height="26" rx="10" fill="#FFFFFF" fill-opacity=".16"/>
+</g>
+
+</svg></div>
+      <div class="rise">
+        <span class="kicker">Your wallet, your bitcoin</span>
+        <h2>We never hold your sats.</h2>
+        <p class="sub">Connect the Lightning wallet you already use. Oja POS asks it for an invoice, shows the QR code, and tells you the moment it is paid.</p>
+        <ul class="points">
+          <li><span><b>Paid means paid.</b> The success screen appears only after your wallet confirms the money arrived.</span></li>
+          <li><span><b>Priced in naira.</b> You type ₦2,500 and the app works out the sats.</span></li>
+          <li><span><b>Leave any time.</b> Disconnect the wallet and nothing of yours stays behind.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="split flip">
+      <div class="art a-lilac rise"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" fill="none">
+
+<ellipse cx="400" cy="330" rx="330" ry="250" fill="#EFE8FC"/>
+<circle cx="120" cy="330" r="10" fill="#F7931A"/><circle cx="700" cy="330" r="12" fill="#0B6E4F"/><circle cx="400" cy="70" r="8" fill="#7A4BE0"/>
+<path d="M250 110 H550 V520 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 Z" fill="#08382B" opacity=".14" transform="translate(8 12)"/>
+<path d="M250 110 H550 V520 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 l-15 18 l-15 -18 Z" fill="#FFFFFF"/>
+<g transform="translate(372 138)"><rect width="56" height="56" rx="17" fill="#0B6E4F"/><circle cx="28" cy="28" r="13" stroke="#FFFFFF" stroke-width="5"/><path transform="translate(28 28) scale(0.085) translate(-256 -256)" d="M298 70 L178 290 H252 L214 442 L334 222 H260 Z" fill="#F7931A"/></g>
+<rect x="340" y="206" width="120" height="10" rx="5" fill="#E3E7EC"/>
+<rect x="282" y="238" width="120" height="12" rx="6" fill="#E3E7EC"/><rect x="462" y="238" width="56" height="12" rx="6" fill="#0E1726" opacity=".8"/><rect x="282" y="282" width="150" height="12" rx="6" fill="#E3E7EC"/><rect x="474" y="282" width="44" height="12" rx="6" fill="#0E1726" opacity=".8"/><rect x="282" y="326" width="96" height="12" rx="6" fill="#E3E7EC"/><rect x="456" y="326" width="62" height="12" rx="6" fill="#0E1726" opacity=".8"/><rect x="282" y="370" width="134" height="12" rx="6" fill="#E3E7EC"/><rect x="468" y="370" width="50" height="12" rx="6" fill="#0E1726" opacity=".8"/>
+<path d="M282 414 H518" stroke="#E3E7EC" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+<rect x="282" y="436" width="70" height="16" rx="8" fill="#0E1726"/><rect x="428" y="432" width="90" height="24" rx="9" fill="#0B6E4F"/>
+<g transform="translate(484 150)"><circle r="30" fill="#0B6E4F"/><path d="M-13 0 l9 10 l17 -19" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g transform="translate(96 130) rotate(-8 55 55)"><rect x="4" y="8" width="110" height="110" rx="28" fill="#08382B" opacity=".13"/><rect width="110" height="110" rx="28" fill="#FFFFFF"/><rect x="18" y="18" width="74" height="74" rx="20" fill="#DDF3E7"/><rect x="34" y="66" width="8" height="12" rx="3" fill="#0B6E4F"/><rect x="47" y="57" width="8" height="21" rx="3" fill="#0B6E4F"/><rect x="60" y="48" width="8" height="30" rx="3" fill="#0B6E4F"/><rect x="73" y="39" width="8" height="39" rx="3" fill="#0B6E4F"/></g>
+<g transform="translate(600 110) rotate(8 55 55)"><rect x="4" y="8" width="110" height="110" rx="28" fill="#08382B" opacity=".13"/><rect width="110" height="110" rx="28" fill="#FFFFFF"/><rect x="18" y="18" width="74" height="74" rx="20" fill="#E6EEFD"/><path d="M33 52 a30 30 0 0 1 44 0" stroke="#2E6BE6" stroke-width="7" stroke-linecap="round"/><path d="M42 62 a17 17 0 0 1 26 0" stroke="#2E6BE6" stroke-width="7" stroke-linecap="round"/><circle cx="55" cy="74" r="5.5" fill="#2E6BE6"/></g>
+<g transform="translate(76 380) rotate(6 55 55)"><rect x="4" y="8" width="110" height="110" rx="28" fill="#08382B" opacity=".13"/><rect width="110" height="110" rx="28" fill="#FFFFFF"/><rect x="18" y="18" width="74" height="74" rx="20" fill="#EFE8FC"/><rect x="32" y="38" width="46" height="32" rx="7" fill="#7A4BE0"/><path d="M45 28 l10 10 l10 -10" stroke="#7A4BE0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="44" y="74" width="22" height="5" rx="2.5" fill="#7A4BE0"/></g>
+<g transform="translate(610 390) rotate(-7 55 55)"><rect x="4" y="8" width="110" height="110" rx="28" fill="#08382B" opacity=".13"/><rect width="110" height="110" rx="28" fill="#FFFFFF"/><rect x="18" y="18" width="74" height="74" rx="20" fill="#FEF1DD"/><path d="M55 30 a19 19 0 0 1 11 34 v7 h-22 v-7 a19 19 0 0 1 11 -34 z" fill="#F7931A"/><rect x="46" y="74" width="18" height="6" rx="3" fill="#F7931A"/></g>
+
+</svg></div>
+      <div class="rise">
+        <span class="kicker">Bills</span>
+        <h2>Sell airtime and light, too.</h2>
+        <p class="sub">Top up a naira float once, then vend to customers all day. If a provider fails to deliver, the money returns to your float automatically.</p>
+        <div class="tiles">
+          <div>Airtime<small>MTN, Airtel, Glo, 9mobile</small></div>
+          <div>Data<small>All major bundles</small></div>
+          <div>TV<small>DStv, GOtv, StarTimes</small></div>
+          <div>Electricity<small>Prepaid and postpaid</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="head rise">
+      <span class="kicker">How it works</span>
+      <h2>A sale in four taps.</h2>
+      <p class="sub">No training and no extra hardware. If you can use a calculator, you can run the till.</p>
+    </div>
+    <ol class="steps rise">
+      <li><h3>Type the amount</h3><p>The keypad is the first thing you see.</p></li>
+      <li><h3>Pick a method</h3><p>Lightning, card or cash. One button each.</p></li>
+      <li><h3>Customer scans</h3><p>With their own wallet or banking app.</p></li>
+      <li><h3>Payment received</h3><p>Shown only once the money has arrived.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="safe">
+  <div class="wrap">
+    <div class="head rise">
+      <span class="kicker">Security</span>
+      <h2>Built so the money adds up.</h2>
+      <p class="sub">The rules that protect your balance live on the server, where the app cannot bend them.</p>
+    </div>
+    <div class="safe-grid rise">
+      <div><i><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9m-3 3 2.5 2.500M14 9l2 2"/></svg></i><h3>No payment keys in the app</h3><p>Paystack and bill-payment keys stay on the server. A copied app has nothing to steal.</p></div>
+      <div><i><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.500V7.500a4 4 0 0 1 8 0v3"/></svg></i><h3>The app cannot edit your float</h3><p>Only the server credits or debits it, after checking with the payment provider.</p></div>
+      <div><i><svg viewBox="0 0 24 24"><path d="M5 12.500l4.5 4.500L19 7.5"/></svg></i><h3>Every payment counts once</h3><p>A payment confirmed twice is still credited once, and two purchases at the same instant cannot overdraw you.</p></div>
+      <div><i><svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.300-5.400"/><path d="M4.5 4.500v4h4"/></svg></i><h3>Failed bills refund themselves</h3><p>A definite failure returns the money. An unclear answer is held as processing until it is settled.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="get" id="get">
+  <div class="wrap">
+    <div class="get-card on-green rise">
+      <h2>Your till is ready.</h2>
+      <p class="sub">Works on Android, iPhone and in any modern browser.</p>
+      <div class="stores">
+        <a class="store" data-store="android" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m0 0-3-3m3 3 3-3"/><path d="M10.5 18h3"/></svg><span><small>Download for</small><strong>Android</strong></span></a>
+        <a class="store" data-store="ios" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3.5"/><path d="M10 5.5h4"/><path d="M11 18.5h2"/></svg><span><small>Get it on</small><strong>iPhone</strong></span></a>
+        <a class="store" data-store="web" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3.2 3 15.8 0 19M12 2.5c-3 3.2-3 15.8 0 19"/></svg><span><small>Open the</small><strong>Web app</strong></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Oja POS"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 796 718"><g fill="none" stroke="#0B6E4F" stroke-width="88" stroke-linecap="round" stroke-linejoin="round"><circle cx="174" cy="350" r="106.0"/><path d="M398.0 244.0 V556 Q398.0 650 308.0 650"/><circle cx="622.0" cy="350" r="106.0"/><path d="M728.0 244.0 V456.0"/></g><path d="M428.0 22 L344.0 116 H392.0 L368.0 178 L454.0 80 H406.0 Z" fill="#F7931A" stroke="#F7931A" stroke-width="14" stroke-linejoin="round"/></svg></a>
+    <span>Built for the Dakar Bitcoin Hack 2026</span>
+    <a href="#" data-link="github">Source code</a>
+    <span>MIT licence</span>
+  </div>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------
+   DOWNLOAD LINKS: edit these four values. Leave one empty ("") and its
+   button shows "Coming soon" instead of a broken link.
+   ------------------------------------------------------------------ */
+const LINKS = {
+  android: "downloads/oja-pos.apk",   // put your release APK in landing/downloads/
+  ios: "",                            // TestFlight or App Store link
+  web: "app/",                        // the Flutter web app (built by build_web.sh)
+  github: ""                          // your public repository
+};
+
+document.documentElement.classList.add("js");
+
+// Wire up the store buttons and highlight the visitor's own platform.
+(function () {
+  const ua = navigator.userAgent || "";
+  const mine = /android/i.test(ua) ? "android" : /iphone|ipad|ipod/i.test(ua) ? "ios" : "web";
+  document.querySelectorAll("[data-store]").forEach(function (a) {
+    const key = a.dataset.store, url = LINKS[key];
+    if (url) {
+      a.href = url;
+    } else {
+      a.classList.add("soon");
+      a.setAttribute("aria-disabled", "true");
+      a.removeAttribute("href");
+      a.querySelector("small").textContent = "Coming soon";
+    }
+    a.classList.toggle("primary", key === (LINKS[mine] ? mine : "web") && !!url);
+  });
+  // Log in / Create account open the web app straight on the right form.
+  document.querySelectorAll("[data-app]").forEach(function (a) {
+    a.href = LINKS.web + "?mode=" + a.dataset.app;
+  });
+  document.querySelectorAll("[data-link]").forEach(function (a) {
+    const url = LINKS[a.dataset.link];
+    if (url) a.href = url; else a.remove();
+  });
+  const nav = document.getElementById("nav");
+  const onScroll = function () { nav.classList.toggle("stuck", window.scrollY > 8); };
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+})();
+
+// Decorative QR pattern for the demo phone (not a real payment code).
+(function () {
+  const n = 21, cells = [];
+  let seed = 20261120;
+  const rnd = function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+  const inFinder = function (x, y) { return (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9); };
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+    if (!inFinder(x, y) && rnd() < 0.5) cells.push('<rect x="' + (x + 0.07) + '" y="' + (y + 0.07) + '" width=".86" height=".86" rx=".22"/>');
+  }
+  const finder = function (x, y) {
+    return '<rect x="' + x + '" y="' + y + '" width="7" height="7" rx="1.8"/><rect x="' + (x + 1.2) + '" y="' + (y + 1.2) + '" width="4.6" height="4.6" rx="1.1" fill="#fff"/><rect x="' + (x + 2.2) + '" y="' + (y + 2.2) + '" width="2.6" height="2.6" rx=".7"/>';
+  };
+  document.getElementById("qr").innerHTML = '<svg viewBox="0 0 ' + n + ' ' + n + '" fill="#0E1726" aria-hidden="true">' + cells.join("") + finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7) + '</svg>';
+})();
+
+// The hero demo: type 2,500, tap Lightning, show the QR, payment arrives.
+(function () {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const phone = document.getElementById("phone"), amt = document.getElementById("amt");
+  const keys = Array.prototype.slice.call(document.querySelectorAll("#keys span"));
+  const mln = document.getElementById("mln");
+  const wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  const tap = async function (el) { el.classList.add("hit"); await wait(170); el.classList.remove("hit"); };
+  const key = function (label) { return keys.find(function (k) { return k.textContent === label; }); };
+  const show = function (digits) { amt.textContent = "₦" + (digits ? Number(digits).toLocaleString("en-NG") : "0"); };
+  (async function loop() {
+    await wait(2600);
+    for (;;) {
+      phone.dataset.step = "charge"; show("");
+      await wait(700);
+      let typed = "";
+      for (const k of ["2", "5", "00"]) { await tap(key(k)); typed += k; show(typed); await wait(260); }
+      await wait(500); await tap(mln); await wait(200);
+      phone.dataset.step = "qr";
+      await wait(3000);
+      phone.dataset.step = "done";
+      await wait(3200);
+    }
+  })();
+})();
+
+// Scroll-in movement. Content is visible either way; this only adds motion.
+(function () {
+  const items = document.querySelectorAll(".rise");
+  if (!("IntersectionObserver" in window)) { items.forEach(function (el) { el.classList.add("in"); }); return; }
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  items.forEach(function (el, i) { el.style.transitionDelay = (i % 3) * 70 + "ms"; io.observe(el); });
+})();
+</script>
+</body>
+</html>
