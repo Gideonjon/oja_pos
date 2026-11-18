@@ -1,11 +1,13 @@
 name: oja_pos
-description: "A new Flutter project."
-publish_to: 'none'
-version: 0.1.0+1
+description: "Oja POS: a market point-of-sale with Lightning, card/transfer and bill payments."
+publish_to: "none"
+version: 1.0.0+1
 
 environment:
-  sdk: ^3.13.0
+  sdk: ">=3.4.0 <4.0.0"
 
+# Package dependencies are added by ../setup.sh (flutter pub add ...), which
+# resolves the newest versions compatible with your Flutter SDK.
 dependencies:
   flutter:
     sdk: flutter
@@ -13,7 +15,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/brand/
+    - assets/onboarding/
