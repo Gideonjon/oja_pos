@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "176880724083",
+    "project_id": "ojapos",
+    "storage_bucket": "ojapos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176880724083:android:50d5feff6356e16cff2206",
+        "android_client_info": {
+          "package_name": "com.example.oja_pos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0F_helZa-KrzId5JcPB6Lc-ygS22br1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
