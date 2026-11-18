@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// Oja POS security rules.
+//
+// A merchant can read only their own data. The float balance and every
+// Paystack / bill transaction are written by the Cloudflare Worker using a
+// service account (which bypasses these rules), never by the app.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+
+      // The app may create its profile, but can never set a balance.
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['businessName', 'updatedAt'])
+        && request.resource.data.businessName is string
+        && request.resource.data.businessName.size() <= 60;
+
+      // ...and may only ever change the profile fields.
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['businessName', 'updatedAt'])
+        && request.resource.data.businessName is string
+        && request.resource.data.businessName.size() <= 60;
+
+      allow delete: if false;
+
+      match /transactions/{txId} {
+        allow read: if isOwner(uid);
+
+        // The app records only sales it collected directly: cash, or
+        // Lightning paid straight into the merchant's own wallet. These do
+        // not touch the float balance.
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['type', 'method', 'status', 'amountKobo', 'note', 'sats', 'createdAt'])
+          && request.resource.data.type == 'sale'
+          && request.resource.data.method in ['cash', 'lightning']
+          && request.resource.data.status == 'success'
+          && request.resource.data.amountKobo is int
+          && request.resource.data.amountKobo > 0
+          && request.resource.data.amountKobo <= 1000000000
+          && request.resource.data.note is string
+          && request.resource.data.note.size() <= 120
+          && (!('sats' in request.resource.data) || (request.resource.data.sats is int && request.resource.data.sats > 0))
+          && request.resource.data.createdAt == request.time;
+
+        allow update, delete: if false;
+      }
+    }
+
+    // Worker-only bookkeeping.
+    match /paystack_refs/{ref} {
+      allow read, write: if false;
+    }
+  }
+}
