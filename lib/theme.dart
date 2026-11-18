@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,10 +38,11 @@ ThemeData buildTheme() {
       );
 
   return base.copyWith(
-    textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).apply(
-      bodyColor: AppColors.ink,
-      displayColor: AppColors.ink,
-    ),
+  textTheme: base.textTheme.apply(
+  fontFamily: GoogleFonts.dmSans().fontFamily,
+  bodyColor: AppColors.ink,
+  displayColor: AppColors.ink,
+),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.bg,
       surfaceTintColor: Colors.transparent,
