@@ -10,13 +10,14 @@ API="${1:?Usage: ./build_web.sh <worker URL>}"
 cd "$(dirname "$0")"
 
 echo "==> Building the Flutter web app"
-(cd app && flutter build web --release --base-href /app/ --dart-define=API_BASE_URL="$API")
+flutter build web --release --base-href /app/ --dart-define=API_BASE_URL="$API"
+mkdir -p landing
 rm -rf landing/app
-cp -R app/build/web landing/app
+cp -R build/web landing/app
 
-if [ -f app/build/app/outputs/flutter-apk/app-release.apk ]; then
+if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
   mkdir -p landing/downloads
-  cp app/build/app/outputs/flutter-apk/app-release.apk landing/downloads/oja-pos.apk
+  cp build/app/outputs/flutter-apk/app-release.apk landing/downloads/oja-pos.apk
   echo "==> Copied the Android APK for the download button"
 fi
 
