@@ -1,0 +1,19 @@
+name = "oja-pos-api"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Your Firebase project ID (Firebase console > Project settings).
+FIREBASE_PROJECT_ID = "your-firebase-project-id"
+# Sandbox: https://sandbox.vtpass.com/api   Live: https://vtpass.com/api
+VTPASS_BASE_URL = "https://sandbox.vtpass.com/api"
+# Comma-separated list of web origins allowed to call the API, or "*".
+ALLOWED_ORIGINS = "*"
+
+# Secrets (never put these in this file). Set each with:
+#   npx wrangler secret put PAYSTACK_SECRET_KEY
+#   npx wrangler secret put VTPASS_API_KEY
+#   npx wrangler secret put VTPASS_PUBLIC_KEY
+#   npx wrangler secret put VTPASS_SECRET_KEY
+#   npx wrangler secret put FIREBASE_SERVICE_ACCOUNT   (paste the whole service-account JSON)
+# For local `wrangler dev`, copy .dev.vars.example to .dev.vars instead.
